@@ -1,0 +1,33 @@
+{
+    "name": "talbot-ninja/nova-mailgun",
+    "description": "A Laravel Nova card and metrics for Mailgun.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "mailgun"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "mailgun/mailgun-php": "^2.6",
+        "php-http/curl-client": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "TalbotNinja\\NovaMailgun\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TalbotNinja\\NovaMailgun\\CardServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
