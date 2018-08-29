@@ -43,8 +43,8 @@ abstract class Value extends NovaValue
     {
         $this->statistics->forEvent($this->event);
 
-        $result = $this->statistics->fromTo($this->currentRange($request->get('range')))->get();
-        $previous = $this->statistics->fromTo($this->previousRange($request->get('range')))->get();
+        $result = $this->statistics->fromTo($this->currentRange($request->get('range')))->sum();
+        $previous = $this->statistics->fromTo($this->previousRange($request->get('range')))->sum();
 
         return $this->result($result)->previous($previous);
     }
@@ -68,6 +68,6 @@ abstract class Value extends NovaValue
 
     public function cacheFor()
     {
-        return config('nova-mailgun.cache');
+        return now()->addMinutes(config('nova-mailgun.cache'));
     }
 }

@@ -5,6 +5,7 @@ namespace TalbotNinja\NovaMailgun\Mailgun;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Mailgun\Mailgun;
+use Mailgun\Model\Stats\TotalResponseItem;
 
 class MailgunStatistic
 {
@@ -81,7 +82,8 @@ class MailgunStatistic
         return $this;
     }
 
-    public function get(): int
+    /** @return TotalResponseItem[] */
+    public function get(): array
     {
         $results = $this->mailgun->stats()->total($this->domain, [
             'event' => $this->event,
@@ -89,6 +91,18 @@ class MailgunStatistic
             'end' => $this->end->timestamp,
         ]);
 
-        return Collection::make($results->getStats())->sum("{$this->event}.{$this->type}");
+        return $results->getStats();
+    }
+
+    public function associatedDateValue()
+    {
+        return Collection::make($this->get())->mapWithKeys(function (TotalResponseItem $item) {
+            return [$item->getTime()->format('M j') => Collection::make($item->getAccepted())->sum($this->type)];
+        })->all();
+    }
+
+    public function sum(): int
+    {
+        return Collection::make($this->get())->sum("{$this->event}.{$this->type}");
     }
 }
